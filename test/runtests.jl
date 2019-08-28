@@ -7,13 +7,23 @@ using Plots, Pkg, Test
         seq1 = Bioinformatics.Sequence("AND", Bioinformatics.AA)
         seq2 = Bioinformatics.Sequence("SEND", Bioinformatics.AA)
         sm = Bioinformatics.BLOSUM62
-        mat = Bioinformatics.global_alignment_linear_gap(seq1, seq2, sm, 10)
+        mat = Bioinformatics.pairwise_global_alignment_linear_gap(
+            seq1,
+            seq2,
+            sm,
+            10
+        )
         @test mat[length(seq1)+1, length(seq2)+1] == 3
 
         seq1 = Bioinformatics.Sequence("HEAGAWGHEE", Bioinformatics.AA)
         seq2 = Bioinformatics.Sequence("PAWHEAE", Bioinformatics.AA)
         sm = Bioinformatics.BLOSUM50
-        mat = Bioinformatics.global_alignment_linear_gap(seq1, seq2, sm, 8)
+        mat = Bioinformatics.pairwise_global_alignment_linear_gap(
+            seq1,
+            seq2,
+            sm,
+            8
+        )
         @test mat[length(seq1)+1, length(seq2)+1] == 1
     end
 
@@ -48,7 +58,10 @@ using Plots, Pkg, Test
         @test isa(plot, Plots.Plot) == true
         @test isa(display(plot), Nothing) == true
 
-        seq = Bioinformatics.Sequence("CATGGGCATCGGCCATACGCC", Bioinformatics.DNA)
+        seq = Bioinformatics.Sequence(
+            "CATGGGCATCGGCCATACGCC",
+            Bioinformatics.DNA
+        )
         plot = Bioinformatics.skew_plot(seq)
         @test isa(plot, Plots.Plot) == true
         @test isa(display(plot), Nothing) == true

@@ -1,3 +1,28 @@
+@enum AlignmentType begin
+    Global = 1
+    Local = 2
+    SemiGlobal = 3
+end
+
+mutable struct PairwiseAlignment
+    seq1::Sequence
+    seq2::Sequence
+    type::AlignmentType
+    sm::Dict{Tuple{Char,Char},Int64}
+    d::Int
+    align_mat::Array{Float64,2}
+    function PairwiseAlignment(seq1, seq2, type, sm, d)
+        if type == Global
+            align_mat = pairwise_global_alignment_linear_gap(seq1, seq2, sm, d)
+            return new(seq1, seq2, type, sm, d, align_mat)
+        elseif type == Local
+            error("This function is not implemented yet.")
+        else
+            error("This function is not implemented yet.")
+        end
+    end
+end
+
 """
     function dotmatrix(s1::Sequence, s2::Sequence)
 
@@ -16,11 +41,16 @@ function dotmatrix(s1::Sequence, s2::Sequence)
 end
 
 """
-    function global_alignment_linear_gap(seq1, seq2, sm, d)
+    function pairwise_global_alignment_linear_gap(seq1, seq2, sm, d)
 
 Needleman-Wunsch algorithm with linear gap penalty.
 """
-function global_alignment_linear_gap(seq1::Sequence, seq2::Sequence, sm, d)
+function pairwise_global_alignment_linear_gap(
+    seq1::Sequence,
+    seq2::Sequence,
+    sm::Dict{Tuple{Char,Char},Int64},
+    d::Int
+)
     m = length(seq1) + 1
     n = length(seq2) + 1
     mat = zeros(m, n)
